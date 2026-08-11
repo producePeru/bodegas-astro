@@ -1,0 +1,80 @@
+<script setup>
+const props = defineProps({
+  redes: { type: Object, default: () => ({}) },
+  tamano: { type: String, default: 'sm' },
+  coloreado: { type: Boolean, default: false },
+});
+
+const tamanos = { sm: 'w-4 h-4', md: 'w-5 h-5', lg: 'w-7 h-7' };
+const claseIcono = tamanos[props.tamano] ?? tamanos.sm;
+
+const colores = {
+  facebook: '#1877F2',
+  instagram: '#E4405F',
+  tiktok: '#000000',
+  whatsapp: '#25D366',
+};
+
+const fill = (red) => (props.coloreado ? colores[red] : 'currentColor');
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <a
+      v-if="redes.facebook"
+      :href="redes.facebook"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Facebook"
+      class="hover:opacity-75 transition-opacity"
+    >
+      <svg :fill="fill('facebook')" viewBox="0 0 24 24" :class="claseIcono">
+        <path
+          d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"
+        />
+      </svg>
+    </a>
+    <a
+      v-if="redes.instagram"
+      :href="redes.instagram"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+      class="hover:opacity-75 transition-opacity"
+    >
+      <svg :fill="fill('instagram')" viewBox="0 0 24 24" :class="claseIcono">
+        <path
+          d="M12 2c2.7 0 3.1 0 4.1.1 1.1 0 1.8.2 2.4.5.7.2 1.2.6 1.7 1.1.5.5.8 1 1.1 1.7.2.6.4 1.3.5 2.4.1 1 .1 1.4.1 4.1s0 3.1-.1 4.1c0 1.1-.2 1.8-.5 2.4-.2.7-.6 1.2-1.1 1.7-.5.5-1 .8-1.7 1.1-.6.2-1.3.4-2.4.5-1 .1-1.4.1-4.1.1s-3.1 0-4.1-.1c-1.1 0-1.8-.2-2.4-.5-.7-.2-1.2-.6-1.7-1.1-.5-.5-.8-1-1.1-1.7-.2-.6-.4-1.3-.5-2.4C2 15.1 2 14.7 2 12s0-3.1.1-4.1c0-1.1.2-1.8.5-2.4.2-.7.6-1.2 1.1-1.7.5-.5 1-.8 1.7-1.1.6-.2 1.3-.4 2.4-.5C8.9 2 9.3 2 12 2zm0 1.8c-2.6 0-3 0-4 .1-.9 0-1.4.2-1.7.3-.4.2-.7.3-1 .6-.3.3-.5.6-.6 1-.1.3-.3.8-.3 1.7-.1 1-.1 1.4-.1 4s0 3 .1 4c0 .9.2 1.4.3 1.7.2.4.3.7.6 1 .3.3.6.5 1 .6.3.1.8.3 1.7.3 1 .1 1.4.1 4 .1s3 0 4-.1c.9 0 1.4-.2 1.7-.3.4-.2.7-.3 1-.6.3-.3.5-.6.6-1 .1-.3.3-.8.3-1.7.1-1 .1-1.4.1-4 .1s0 3-.1 4c0-.9-.2-1.4-.3-1.7-.2-.4-.3-.7-.6-1-.3-.3-.6-.5-1-.6-.3-.1-.8-.3-1.7-.3-1-.1-1.4-.1-4-.1zm0 3.5a4.7 4.7 0 1 1 0 9.4 4.7 4.7 0 0 1 0-9.4zm0 1.8a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8zm5-2a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z"
+        />
+      </svg>
+    </a>
+    <a
+      v-if="redes.tiktok"
+      :href="redes.tiktok"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="TikTok"
+      class="hover:opacity-75 transition-opacity"
+    >
+      <svg :fill="fill('tiktok')" viewBox="0 0 24 24" :class="claseIcono">
+        <path
+          d="M16.6 5.8a4.3 4.3 0 0 1-2.6-2.6h-2.7v11.5a2.6 2.6 0 1 1-1.8-2.5V9.3a5.4 5.4 0 1 0 4.5 5.4V9.1a6.9 6.9 0 0 0 3.9 1.2V7.6a4.3 4.3 0 0 1-1.3-1.8z"
+        />
+      </svg>
+    </a>
+    <a
+      v-if="redes.whatsapp"
+      :href="`https://wa.me/${redes.whatsapp}`"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="WhatsApp"
+      class="hover:opacity-75 transition-opacity"
+    >
+      <svg :fill="fill('whatsapp')" viewBox="0 0 24 24" :class="claseIcono">
+        <path
+          d="M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1s-.7.8-.9 1c-.2.2-.3.2-.6.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.6-1.3.1-.2 0-.4 0-.5L8.7 8.4c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.2s1 2.6 1.1 2.8c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"
+        />
+      </svg>
+    </a>
+  </div>
+</template>
