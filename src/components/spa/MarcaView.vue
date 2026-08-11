@@ -27,9 +27,13 @@ const redesSociales = computed(() => {
   return r;
 });
 
+const baseSinApi = (base) => base.replace(/\/api\/?$/, '');
+
 const imagenUrl = computed(() => {
   const url = tienda.value?.image?.url;
-  return url ? `${apiBase.replace('/api', '')}/${url}` : '';
+  if (!url) return '';
+  if (/^https?:\/\//.test(url)) return url;
+  return `${baseSinApi(apiBase)}/${url}`;
 });
 
 async function cargar() {
