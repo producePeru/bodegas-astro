@@ -3,31 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import SocialIcons from "../../components/SocialIcons.astro";
 import { fetchTiendaById, enviarContacto } from "../../services/api";
 
-// export const prerender = true;
-
-export async function getStaticPaths() {
-  const apiBase = import.meta.env.DEV
-    ? import.meta.env.PUBLIC_API_URL_LOCAL
-    : import.meta.env.PUBLIC_API_URL_PRODUCTION;
-
-  try {
-    const response = await fetch(`${apiBase}/pnte-public/tiendas`);
-    const resultado = await response.json();
-
-    const tiendas =
-      resultado?.data?.data || resultado?.data || resultado || [];
-
-    return tiendas.map((tienda) => ({
-      params: {
-        id: String(tienda.id),
-      },
-    }));
-  } catch (error) {
-    console.error("Error obteniendo tiendas:", error);
-    return [];
-  }
-}
-
 const { id } = Astro.params;
 
 const apiBase = import.meta.env.DEV
