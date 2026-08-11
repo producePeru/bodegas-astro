@@ -1,0 +1,47 @@
+---
+const { marca } = Astro.props;
+
+// Si en el futuro tienes el logo real como imagen, usa marca.logo y
+// renderiza un <img>; mientras tanto se genera un logo tipográfico.
+const estiloClases = {
+  "sans-bold": "font-body font-extrabold uppercase tracking-wide",
+  "sans-light": "font-body font-medium",
+  "sans-italic": "font-body font-bold italic",
+  "serif-bold": "font-body font-black uppercase tracking-widest",
+  script: "font-display font-semibold text-2xl",
+  hand: "font-display font-semibold text-2xl",
+};
+
+const claseTexto = estiloClases[marca.estilo] ?? "font-body font-semibold";
+---
+
+<a
+  href={`/marca/${marca.slug}`}
+  class="group flex flex-col items-center justify-center aspect-square bg-white border border-stone-200 rounded-lg hover:border-[#e31d1a]/50 hover:shadow-md transition-all"
+>
+  <div
+    class="w-full flex-1 flex items-center justify-center text-stone-500 group-hover:text-[#00a6db] transition-colors p-6 md:p-8"
+  >
+    {
+      marca.logo ? (
+        <img
+          src={marca.logo}
+          alt={`Logo de ${marca.nombre}`}
+          class="h-20 md:h-32 max-w-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
+          loading="lazy"
+        />
+      ) : (
+        <span
+          class={`${claseTexto} text-center leading-tight text-xl md:text-2xl`}
+        >
+          {marca.nombre}
+        </span>
+      )
+    }
+  </div>
+  <span
+    class="w-full py-3 md:py-4 text-center text-sm md:text-base font-medium text-stone-600 border-t border-stone-100 group-hover:text-[#e31d1a] group-hover:border-[#e31d1a]/30 transition-colors truncate px-3"
+  >
+    {marca.nombre}
+  </span>
+</a>

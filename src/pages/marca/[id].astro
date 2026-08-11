@@ -1,0 +1,207 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SocialIcons from "../../components/SocialIcons.astro";
+import { fetchTiendaById, enviarContacto } from "../../services/api";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+const apiBase = import.meta.env.DEV
+  ? import.meta.env.PUBLIC_API_URL_LOCAL
+  : import.meta.env.PUBLIC_API_URL_PRODUCTION;
+
+let tienda = null;
+
+try {
+  const resultado = await fetchTiendaById(id);
+  tienda = resultado?.data || resultado;
+} catch (e) {
+  console.error('Error fetching tienda:', e);
+}
+
+if (!tienda) {
+  return Astro.redirect('/');
+}
+
+const redesSociales = {};
+if (tienda.socials) {
+  tienda.socials.forEach((social) => {
+    const name = social.name.toLowerCase();
+    if (name === 'facebook') redesSociales.facebook = social.link;
+    if (name === 'instagram') redesSociales.instagram = social.link;
+    if (name === 'tiktok') redesSociales.tiktok = social.link;
+    if (name === 'whatsapp') redesSociales.whatsapp = social.link;
+  });
+}
+
+const imagenUrl = tienda.image?.url
+  ? `${apiBase.replace('/api', '')}/${tienda.image.url}`
+  : '';
+---
+
+<Layout title={`${tienda.nombre} — PROGRAMA NACIONAL TU EMPRESA`}>
+  <nav class="bg-white border-b border-neutral-200" aria-label="Ruta">
+    <div class="max-w-7xl mx-auto px-4 py-3 text-sm text-neutral-500">
+      <a href="/" class="hover:text-[#00a6db] transition-colors">Inicio</a>
+      <span class="mx-2 text-neutral-300">›</span>
+      <span class="text-neutral-800 font-medium">{tienda.nombre}</span>
+    </div>
+  </nav>
+
+  <section class="max-w-7xl mx-auto px-4 py-10 md:py-14">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+      <div class="lg:col-span-3">
+        <div class="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm">
+          <div class="aspect-[16/9] bg-gradient-to-br from-[#00a6db]/10 to-[#00a1d4]/10 flex items-center justify-center p-8">
+            {imagenUrl ? (
+              <img src={imagenUrl} alt={`Logo de ${tienda.nombre}`} class="h-40 md:h-52 w-auto object-contain drop-shadow" />
+            ) : (
+              <span class="text-2xl font-semibold text-stone-400">{tienda.nombre}</span>
+            )}
+          </div>
+          <div class="p-5 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100">
+            <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-sm font-semibold px-3 py-1.5 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+              </svg>
+              Tienda verificada
+            </span>
+          </div>
+        </div>
+
+        <h1 class="font-display text-3xl md:text-4xl font-extrabold text-neutral-900 mt-8 mb-2">{tienda.nombre}</h1>
+        <div class="text-neutral-600 leading-relaxed text-lg mb-8" set:html={tienda.descripcion}></div>
+
+        <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6 mb-8">
+          <h2 class="font-display text-lg font-bold text-neutral-900 mb-4">Ficha de la tienda</h2>
+          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <dt class="text-xs uppercase tracking-wide text-neutral-400 mb-1">RUC</dt>
+              <dd class="font-mono font-semibold text-neutral-800">{tienda.ruc}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wide text-neutral-400 mb-1">Celular</dt>
+              <dd class="font-semibold text-neutral-800">{tienda.celular}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wide text-neutral-400 mb-1">Correo</dt>
+              <dd class="font-semibold text-neutral-800 break-all">{tienda.correo}</dd>
+            </div>
+             <div>
+               <dt class="text-xs uppercase tracking-wide text-neutral-400 mb-1">Categoría</dt>
+               <dd class="font-semibold text-neutral-800">{tienda.categoria || 'No especificada'}</dd>
+             </div>
+             <div>
+               <dt class="text-xs uppercase tracking-wide text-neutral-400 mb-1">Estado</dt>
+               <dd class="font-semibold text-emerald-600">Activa</dd>
+             </div>
+           </dl>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6">
+          <h3 class="font-semibold text-neutral-900 mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[#00a1d4]">
+              <path d="M21 6h-2v2h-2V6h-2V4h2V2h2v2h2v2zm-10 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 4c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+            </svg>
+            Redes sociales
+          </h3>
+          <div class="flex gap-4">
+            <SocialIcons redes={redesSociales} tamano="lg" coloreado />
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="lg:sticky lg:top-24">
+          <div class="bg-white rounded-2xl shadow-lg border border-neutral-200 p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-11 h-11 rounded-xl bg-[#00a6db] flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 class="font-display text-xl font-bold text-neutral-900 leading-tight">Contáctanos</h2>
+                <p class="text-xs text-neutral-500">Te respondemos en menos de 24h</p>
+              </div>
+            </div>
+            <p class="text-neutral-500 mb-6 text-sm">
+              Completa el formulario y nos pondremos en contacto con la tienda <strong>{tienda.nombre}</strong>.
+            </p>
+
+             <form id="contact-form" class="space-y-4">
+               <div>
+                 <label for="nombre" class="block text-sm font-medium text-neutral-700 mb-1">Nombre *</label>
+                 <input id="nombre" type="text" required placeholder="Tu nombre completo" class="w-full px-4 py-2.5 rounded-lg border border-neutral-300 focus:border-[#00a6db] focus:ring-2 focus:ring-[#00a6db]/20 outline-none transition" />
+               </div>
+               <div>
+                 <label for="celular" class="block text-sm font-medium text-neutral-700 mb-1">Celular *</label>
+                 <input id="celular" type="tel" required maxlength="9" pattern="9[0-9]{8}" placeholder="999 999 999" class="w-full px-4 py-2.5 rounded-lg border border-neutral-300 focus:border-[#00a6db] focus:ring-2 focus:ring-[#00a6db]/20 outline-none transition" />
+               </div>
+               <div>
+                 <label for="correo" class="block text-sm font-medium text-neutral-700 mb-1">Correo electrónico</label>
+                 <input id="correo" type="email" placeholder="tucorreo@ejemplo.com" class="w-full px-4 py-2.5 rounded-lg border border-neutral-300 focus:border-[#00a6db] focus:ring-2 focus:ring-[#00a6db]/20 outline-none transition" />
+               </div>
+               <div>
+                 <label for="producto" class="block text-sm font-medium text-neutral-700 mb-1">Producto de interés *</label>
+                 <input id="producto" type="text" required placeholder="Ej: Vino tinto, Lavadora..." class="w-full px-4 py-2.5 rounded-lg border border-neutral-300 focus:border-[#00a6db] focus:ring-2 focus:ring-[#00a6db]/20 outline-none transition" />
+               </div>
+               <button id="btn-enviar" type="submit" class="w-full bg-[#00a6db] hover:bg-[#0090bd] text-white font-semibold py-3 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                 Enviar mensaje
+               </button>
+               <p id="form-mensaje" class="text-sm text-center hidden"></p>
+             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { enviarContacto } from '../../services/api';
+
+  const form = document.getElementById('contact-form');
+  const btn = document.getElementById('btn-enviar');
+  const mensaje = document.getElementById('form-mensaje');
+  const tiendaId = parseInt(window.location.pathname.split('/').pop(), 10);
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const celular = document.getElementById('celular').value.trim();
+    const correo = document.getElementById('correo').value.trim();
+    const productos = document.getElementById('producto').value.trim();
+
+    if (!nombre || !celular || !productos) {
+      mensaje.textContent = 'Por favor completa los campos obligatorios.';
+      mensaje.className = 'text-sm text-center text-red-500 block';
+      return;
+    }
+
+    if (!/^9\d{8}$/.test(celular)) {
+      mensaje.textContent = 'El celular debe empezar con 9 y tener exactamente 9 dígitos.';
+      mensaje.className = 'text-sm text-center text-red-500 block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    mensaje.className = 'text-sm text-center hidden';
+
+    try {
+      await enviarContacto({ nombre, celular, correo, productos, id_empresa: tiendaId });
+      mensaje.textContent = 'Mensaje enviado correctamente. Te contactaremos pronto.';
+      mensaje.className = 'text-sm text-center text-emerald-600 block';
+      form.reset();
+    } catch (error) {
+      mensaje.textContent = 'Error al enviar. Intenta nuevamente.';
+      mensaje.className = 'text-sm text-center text-red-500 block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje';
+    }
+  });
+</script>

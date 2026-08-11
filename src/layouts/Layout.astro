@@ -1,0 +1,113 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import SocialIcons from "../components/SocialIcons.astro";
+import RotatingMessage from "../components/RotatingMessage.vue";
+import { empresa } from "../data/marcas";
+
+const { title = empresa.nombre, showBrandHeader = true } = Astro.props;
+const fecha = new Date().getFullYear();
+
+const mensajes = [
+  "Programa Nacional Tu Empresa",
+  "Tiendas en Línea",
+  "Encuentra tu tienda",
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content={`${empresa.nombre} — ${empresa.slogan}`}
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <ViewTransitions />
+    <title>{title}</title>
+  </head>
+  <body class="font-body text-stone-700 bg-white">
+    <!-- Barra de anuncios -->
+    <div class="bg-[#000] text-white">
+      <div
+        class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between gap-3 text-xs md:text-sm"
+      >
+        <SocialIcons
+          tamano="sm"
+          redes={{
+            facebook: "https://facebook.com/littledesign",
+            instagram: "https://instagram.com/littledesign",
+            youtube: "https://youtube.com/@littledesign",
+            tiktok: "https://tiktok.com/@littledesign",
+          }}
+        />
+        <RotatingMessage client:load mensajes={mensajes} />
+        <a
+          href="#buscador"
+          aria-label="Buscar"
+          class="shrink-0 hover:opacity-75 transition-opacity"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-4 h-4"
+          >
+            <path
+              d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+            ></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    {
+      showBrandHeader && (
+        <header
+          class="pb-6 pt-12 flex flex-col items-center justify-center"
+          transition:persist
+        >
+          <a href="/" class="flex flex-col items-center gap-1">
+            <img
+              src="/logos/tu-empresa.png"
+              alt="Logotipo Tu Empresa"
+              class="h-12"
+            />
+          </a>
+        </header>
+      )
+    }
+
+    <main class="min-h-screen">
+      <slot />
+    </main>
+
+    <footer class="bg-[#3c3c3c] mt-12">
+      <div class="max-w-3xl mx-auto px-4 py-10 text-center">
+        <p class="mt-6 text-[11px] text-white/70">
+          &copy; {fecha}
+          {empresa.nombre}. Todos los derechos reservados.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --font-display: "Caveat", cursive;
+    --font-body: "Quicksand", sans-serif;
+  }
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+</style>
