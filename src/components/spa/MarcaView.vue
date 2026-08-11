@@ -41,12 +41,10 @@ async function cargar() {
     tienda.value = resultado?.data || resultado;
     if (!tienda.value) {
       noEncontrada.value = true;
-      setTimeout(() => (window.location.hash = '/'), 1500);
     }
   } catch (e) {
     console.error('Error fetching tienda:', e);
     noEncontrada.value = true;
-    setTimeout(() => (window.location.hash = '/'), 1500);
   } finally {
     cargando.value = false;
   }
@@ -210,29 +208,13 @@ async function enviarFormulario() {
                   {{ tienda.categoria || 'No especificada' }}
                 </dd>
               </div>
-              <div>
-                <dt class="text-xs uppercase tracking-wide text-neutral-400 mb-1">
-                  Estado
-                </dt>
-                <dd class="font-semibold text-emerald-600">Activa</dd>
-              </div>
             </dl>
           </div>
 
           <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm p-6">
-            <h3 class="font-semibold text-neutral-900 mb-3 flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-5 h-5 text-[#00a1d4]"
-              >
-                <path
-                  d="M21 6h-2v2h-2V6h-2V4h2V2h2v2h2v2zm-10 3c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 4c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"
-                ></path>
-              </svg>
+            <h2 class="font-display text-lg font-bold text-neutral-900 mb-4">
               Redes sociales
-            </h3>
+            </h2>
             <div class="flex gap-4">
               <SocialIconsView :redes="redesSociales" tamano="lg" coloreado />
             </div>
