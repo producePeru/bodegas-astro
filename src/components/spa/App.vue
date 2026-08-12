@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import HomeView from './HomeView.vue';
 import MarcaView from './MarcaView.vue';
+import WelcomeModal from './WelcomeModal.vue';
 
 function leerRuta() {
   if (typeof window === 'undefined') return '/';
@@ -25,8 +26,17 @@ const vista = computed(() => (marcaMatch.value ? MarcaView : HomeView));
 const propsVista = computed(() =>
   marcaMatch.value ? { id: Number(marcaMatch.value[1]) } : {}
 );
+
+const modalAbierto = ref(false);
+
+onMounted(() => {
+  if (!sessionStorage.getItem('welcome_modal_visto')) {
+    modalAbierto.value = true;
+  }
+});
 </script>
 
 <template>
   <component :is="vista" v-bind="propsVista" />
+  <WelcomeModal :abierto="modalAbierto" @cerrar="modalAbierto = false; sessionStorage.setItem('welcome_modal_visto', '1')" />
 </template>

@@ -42,9 +42,7 @@ onUnmounted(() => clearTimeout(miniaturarando));
 
 <template>
   <section class="max-w-6xl mx-auto px-4 text-center">
-    <h1 class="font-display text-2xl md:text-3xl text-[#00a6db] tracking-wide">
-      Selecciona la MYPE que quieres contactar.
-    </h1>
+
 
     <div id="buscador" class="mt-6 max-w-sm mx-auto">
       <div class="relative">
@@ -85,7 +83,7 @@ onUnmounted(() => clearTimeout(miniaturarando));
             class="max-w-[75%] md:max-w-[85%] max-h-full md:max-h-[80%] object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
             @error="setMiniatura($event, tienda)" />
           <span v-else class="font-body font-semibold text-center leading-tight text-sm md:text-base">{{ tienda.nombre
-            }}</span>
+          }}</span>
         </div>
         <span
           class="w-full h-10 md:h-11 flex items-center justify-center text-center text-xs md:text-sm font-medium text-stone-600 border-t border-stone-100 group-hover:text-[#e31d1a] group-hover:border-[#e31d1a]/30 transition-colors truncate px-2 shrink-0">
