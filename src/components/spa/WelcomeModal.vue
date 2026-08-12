@@ -81,7 +81,7 @@ function verMypes() {
             </p>
 
             <button class="mt-5 w-full py-3 rounded-full font-bold text-white text-base boton-mypes"
-              @click="verMypes">Ver MYPEs</button>
+              @click="verMypes">Ver MYPE</button>
           </div>
         </div>
       </div>

@@ -77,7 +77,7 @@ async function enviarFormulario() {
 
   try {
     await enviarContacto({
-      nombre: form.value.nombre.trim(),
+      nombre: form.value.nombre.trim() || 'amigo empresario',
       celular: form.value.celular.trim(),
       correo: form.value.correo.trim(),
       productos: form.value.producto.trim(),
@@ -232,8 +232,9 @@ async function enviarFormulario() {
 
               <form id="contact-form" class="space-y-4" @submit.prevent="enviarFormulario">
                 <div>
-                  <label for="nombre" class="block text-sm font-medium text-neutral-700 mb-1">Nombre *</label>
-                  <input id="nombre" v-model="form.nombre" type="text" required placeholder="Tu nombre completo"
+                  <label for="nombre" class="block text-sm font-medium text-neutral-700 mb-1">Razón social / Nombre
+                    comercial</label>
+                  <input id="nombre" v-model="form.nombre" type="text" placeholder="Tu nombre completo"
                     class="w-full px-4 py-2.5 rounded-lg border border-neutral-300 focus:border-[#00a6db] focus:ring-2 focus:ring-[#00a6db]/20 outline-none transition" />
                 </div>
                 <div>
